@@ -22,11 +22,16 @@
 
 package com.masterdevskills.cha1.ext1;
 
+import java.time.Instant;
+import java.util.logging.Logger;
+import java.util.stream.IntStream;
+
 /**
  * @author A N M Bazlur Rahman @bazlur_rahman
  * @since 04 August 2020
  */
 public class LambdaExpression2 {
+	private static final Logger logger = Logger.getLogger(LambdaExpression2.class.getName());
 
 	/**
 	 * TODO Create a functional interface called Executable
@@ -35,13 +40,28 @@ public class LambdaExpression2 {
 	 * use this functional interface as argument of the following method and log
 	 * the time it takes to execute the method
 	 */
-	public void executionTime() {
-		//TODO add your code here;
+	public void executionTime(Executable executable) {
+		long startTime = System.currentTimeMillis();
+		executable.execute();
+		long endTime = System.currentTimeMillis();
+
+		logger.info("Execution time : " + (endTime - startTime) + "ms");
 	}
 
-	/* TODO: use the above of method here
+	/* TODO: use the above of method here           --->// above method
 	 */
 	public void run() {
-		//executionTime();
+		Executable executable = () -> {
+			IntStream.range(0, 5_000_0000).boxed().forEach(integer -> {
+				var logInteger = Math.log((double) integer);
+			});
+		};
+
+		executionTime(executable);
+	}
+
+	@FunctionalInterface
+	public interface Executable {
+		void execute();
 	}
 }

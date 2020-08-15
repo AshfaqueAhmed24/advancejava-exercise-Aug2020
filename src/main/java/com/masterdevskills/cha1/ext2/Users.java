@@ -24,6 +24,9 @@ package com.masterdevskills.cha1.ext2;
 
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author A N M Bazlur Rahman @bazlur_rahman
@@ -43,7 +46,9 @@ public class Users {
 	 * @see User#setStatus(Status)
 	 */
 	public static void activatedAll(List<User> users, Status status) {
-		throw new RuntimeException("NotImplemented");
+		Consumer<User> consumer = (User user) -> user.setStatus(status);
+
+		users.forEach(user -> consumer.accept(user));
 	}
 
 	/**
@@ -57,7 +62,10 @@ public class Users {
 	 */
 
 	public static String makeStringOfAllUsernames(List<User> users) {
+		Function<User, String> function = User::toString;
 
-		throw new RuntimeException("NotImplemented");
+		return users.stream()
+				.map(function)
+				.collect(Collectors.joining(","));
 	}
 }

@@ -22,8 +22,13 @@
 
 package com.masterdevskills.cha1.ext1;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 /**
  * TODO : Write a file processor that would read text from a text file.
@@ -33,6 +38,11 @@ import java.util.function.Predicate;
  */
 
 public class FileProcessor {
+    private static final Logger logger = Logger.getLogger(FileProcessor.class.getName());
+
+    private static boolean isEmptyLine(String s) {
+        return s == null || "".equals(s);
+    }
 
     /**
      * Add your code in the following method
@@ -44,9 +54,18 @@ public class FileProcessor {
      *                 hints:
      * @see List#removeIf(Predicate)
      */
-    public List<String> readFileFrom(String fileName) {
+    public List<String> readFileFrom(String fileName) { //better name fileUri
+        try {
+            var lines =  Files.readAllLines(Paths.get(fileName));
+            lines.removeIf(FileProcessor::isEmptyLine);
+            logger.info("Number of lines in file : " + lines.size());
 
-        throw new RuntimeException("Not Yet Implemented");
+            return lines;
+        } catch (Exception ex) {
+            logger.warning("File not found");
+
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -58,9 +77,24 @@ public class FileProcessor {
      *                 hints
      * @see String#join(CharSequence, CharSequence...)
      */
-    public void writeToFile(List<String> lines, String fileName) {
+    public void writeToFile(List<String> lines, String fileName) { //better name fileUri
+        var filePath =  Paths.get(fileName);
+        if(!Files.exists(Paths.get(fileName))) {
+            try {
+                Files.createFile(filePath);
+            } catch (IOException e) {
+                logger.warning("Can not create the File");
+            }
+        }
 
-        throw new RuntimeException("Not Yet Implemented");
+        lines.removeIf(FileProcessor::isEmptyLine);
+        logger.info("Number of lines in file : " + lines.size());
+
+        try {
+            Files.write(filePath, lines);
+        } catch (IOException e) {
+            logger.warning("Can not write in File");
+        }
     }
 }
 
