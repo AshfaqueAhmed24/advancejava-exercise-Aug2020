@@ -22,7 +22,6 @@
 
 package com.masterdevskills.cha1.ext1;
 
-import java.time.Instant;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
@@ -58,10 +57,5 @@ public class LambdaExpression2 {
 		};
 
 		executionTime(executable);
-	}
-
-	@FunctionalInterface
-	public interface Executable {
-		void execute();
 	}
 }
